@@ -2,7 +2,6 @@
 # coding:utf-8
 
 import rospy
-<<<<<<< HEAD
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PointStamped
 from geometry_msgs.msg import Pose, Quaternion, Point
