@@ -1,0 +1,17 @@
+material vrc/grey_wall_The_Last_Supper
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture The_Last_Supper.jpg
+				filtering anistropic
+				max_anisotropy 16
+				scale 1 1
+			}
+		}
+	}
+}

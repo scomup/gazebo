@@ -414,135 +414,142 @@
           </limit>
         </axis>
       </joint>
-     <!-- camera left -->
-    <link name="camera_sensor_left_link">
-      <pose>0.175 0.05 0.175 0 0 0</pose>
-      <inertial> 
-        <inertia>
-          <ixx>1e-6</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>1e-6</iyy>
-          <iyz>0</iyz>
-          <izz>1e-6</izz>
-        </inertia>
-        <mass>1e-5</mass>
-      </inertial>
-
-      <sensor name="camera_sensor_left" type="camera">
-      <update_rate>10</update_rate>
-      <camera name="head">
-        <horizontal_fov>1.5708</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.02</near>
-          <far>300</far>
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-      </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_sensor_left_controller">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>stereo/left</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera_sensor_left_link</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-        <blurSigma>0</blurSigma>
-        <distortionSigma>0.0</distortionSigma>
-      </plugin>
-    </sensor>
-    </link>
-
-     <joint name="camera_sensor_left_joint" type="revolute">
-      <parent>base</parent>
-      <child>camera_sensor_left_link</child>
-      <axis>
-        <xyz>0.175 0.05 0.175</xyz>
-        <limit>
-          <upper>0</upper>
-          <lower>0</lower>
-        </limit>
-      </axis>
-    </joint>
-
-     <!-- camera right -->
-    <link name="camera_sensor_right_link">
-      <pose>0.175 -0.05 0.175 0 0 0</pose>
-      <inertial> 
-        <inertia>
-          <ixx>1e-6</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>1e-6</iyy>
-          <iyz>0</iyz>
-          <izz>1e-6</izz>
-        </inertia>
-        <mass>1e-5</mass>
-      </inertial>
-
-      <sensor name="camera_sensor_right" type="camera">
-      <update_rate>10</update_rate>
-      <camera name="head">
-        <horizontal_fov>1.5708</horizontal_fov>
-        <image>
-          <width>640</width>
-          <height>480</height>
-          <format>R8G8B8</format>
-        </image>
-        <clip>
-          <near>0.02</near>
-          <far>300</far>
-        </clip>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.007</stddev>
-        </noise>
-      </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_sensor_right_controller">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <cameraName>stereo/right</cameraName>
-        <imageTopicName>image_raw</imageTopicName>
-        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera_sensor_right_link</frameName>
-        <hackBaseline>0.07</hackBaseline>
-        <distortionK1>0.0</distortionK1>
-        <distortionK2>0.0</distortionK2>
-        <distortionK3>0.0</distortionK3>
-        <distortionT1>0.0</distortionT1>
-        <distortionT2>0.0</distortionT2>
-        <blurSigma>0</blurSigma>
-        <distortionSigma>0.0</distortionSigma>
-      </plugin>
-    </sensor>
-    </link>
-
-     <joint name="camera_sensor_right_joint" type="revolute">
-      <parent>base</parent>
-      <child>camera_sensor_right_link</child>
-      <axis>
-        <xyz>0.175 -0.05 0.175</xyz>
-        <limit>
-          <upper>0</upper>
-          <lower>0</lower>
-        </limit>
-      </axis>
-    </joint>
+      <link name='camera_sensor_left_link'>
+        <pose>0.175 0.05 0.175 0 -0 0</pose>
+        <inertial>
+          <inertia>
+            <ixx>1e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1e-06</iyy>
+            <iyz>0</iyz>
+            <izz>1e-06</izz>
+          </inertia>
+          <mass>1e-05</mass>
+        </inertial>
+        <sensor name='camera_sensor_left' type='camera'>
+          <update_rate>30</update_rate>
+          <camera name='head'>
+            <horizontal_fov>1.5708</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.02</near>
+              <far>300</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <plugin name='camera_sensor_left_controller' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>stereo/left</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera_sensor_left_link</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+            <blurSigma>0</blurSigma>
+            <distortionSigma>0.0</distortionSigma>
+          </plugin>
+        </sensor>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='camera_sensor_left_joint' type='revolute'>
+        <parent>base</parent>
+        <child>camera_sensor_left_link</child>
+        <axis>
+          <xyz>0.175 0.05 0.175</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+        </axis>
+      </joint>
+      <link name='camera_sensor_right_link'>
+        <pose>0.175 -0.05 0.175 0 -0 0</pose>
+        <inertial>
+          <inertia>
+            <ixx>1e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1e-06</iyy>
+            <iyz>0</iyz>
+            <izz>1e-06</izz>
+          </inertia>
+          <mass>1e-05</mass>
+        </inertial>
+        <sensor name='camera_sensor_right' type='camera'>
+          <update_rate>30</update_rate>
+          <camera name='head'>
+            <horizontal_fov>1.5708</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.02</near>
+              <far>300</far>
+            </clip>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.007</stddev>
+            </noise>
+          </camera>
+          <plugin name='camera_sensor_right_controller' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>stereo/right</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera_sensor_right_link</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+            <blurSigma>0</blurSigma>
+            <distortionSigma>0.0</distortionSigma>
+          </plugin>
+        </sensor>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <joint name='camera_sensor_right_joint' type='revolute'>
+        <parent>base</parent>
+        <child>camera_sensor_right_link</child>
+        <axis>
+          <xyz>0.175 -0.05 0.175</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+        </axis>
+      </joint>
       <link name='hokuyo_link'>
         <pose>0.05 0 0.11 0 -0 0</pose>
         <inertial>
@@ -637,367 +644,13 @@
         <wheelDiameter>0.2410</wheelDiameter>
         <torque>20</torque>
         <commandTopic>cmd_vel</commandTopic>
-        <odometryTopic>odom</odometryTopic>
-        <odometryFrame>odom</odometryFrame>
-        <robotBaseFrame>base_footprint</robotBaseFrame>
+        <odometryTopic>odomx</odometryTopic>
+        <odometryFrame>odomx</odometryFrame>
+        <robotBaseFrame>base_footprintx</robotBaseFrame>
         <robotNamespace>/</robotNamespace>
       </plugin>
       <pose>0 0 0 0 -0 0</pose>
       <static>0</static>
-    </model>
-    <model name='drc_practice_angled_barrier_135'>
-      <static>1</static>
-      <static>1</static>
-      <link name='one::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>0 0 0 0 0 -1.5707</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='two::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>1.7646 -0.008563 0 0 0 -1.5707</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='three::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>3.52922 -0.016171 0 0 0 -1.5707</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='four::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>5.13431 0.54837 0 0 0 -0.785398</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='five::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>6.3884 1.79074 0 0 0 -0.785398</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='six::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>7.6423 3.03258 0 0 0 -0.785398</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='seven::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>8.89611 4.27529 0 0 0 -0.785398</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='eight::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>10.1496 5.51614 0 0 0 -0.785398</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='nine::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_blue_cylinder/meshes/cylinder.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_blue_cylinder/meshes/cylinder.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>11.0288 6.44203 0 0 -0 0</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <static>1</static>
-      <link name='ten::link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_blue_cylinder/meshes/cylinder.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_blue_cylinder/meshes/cylinder.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <pose>11.0288 6.44203 0.866 0 -0 0</pose>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose>0 -1 0 0 -0 0</pose>
     </model>
     <model name='Dumpster'>
       <link name='link'>
@@ -1084,9 +737,9 @@
           </geometry>
           <material>
             <script>
-              <uri>model://grey_wall/materials/scripts</uri>
+              <uri>model://grey_wall/materials/scripts_the_last_supper</uri>
               <uri>model://grey_wall/materials/textures</uri>
-              <name>vrc/grey_wall</name>
+              <name>vrc/grey_wall_The_Last_Supper</name>
             </script>
           </material>
         </visual>
@@ -1099,80 +752,6 @@
         <gravity>1</gravity>
       </link>
       <pose>3 4 0 0 -0 0</pose>
-    </model>
-    <model name='drc_practice_white_jersey_barrier'>
-      <static>1</static>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose>3 8 0 0 -0 0</pose>
-    </model>
-    <model name='drc_practice_organge_jersey_barrier'>
-      <static>1</static>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_orange_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose>1 6.48281 0 0 -0 0</pose>
     </model>
     <model name='grey_tote'>
       <link name='link'>
@@ -1492,9 +1071,9 @@
           </geometry>
           <material>
             <script>
-              <uri>model://grey_wall/materials/scripts</uri>
+              <uri>model://grey_wall/materials/scripts_Village_Street</uri>
               <uri>model://grey_wall/materials/textures</uri>
-              <name>vrc/grey_wall</name>
+              <name>vrc/grey_wall_Village_Street</name>
             </script>
           </material>
         </visual>
@@ -1508,171 +1087,56 @@
       </link>
       <pose>8 6 0 0 -0 0</pose>
     </model>
-    <model name='drc_practice_white_jersey_barrier_0'>
-      <static>1</static>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://drc_practice_white_jersey_barrier/meshes/jersey_barrier.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-            <contact>
-              <ode/>
-            </contact>
-          </surface>
-        </collision>
-        <velocity_decay>
-          <linear>0</linear>
-          <angular>0</angular>
-        </velocity_decay>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose>0 7 0 0 -0 0</pose>
-    </model>
     <state world_name='default'>
-      <sim_time>1266 180000000</sim_time>
-      <real_time>110 308433914</real_time>
-      <wall_time>1483178956 437448168</wall_time>
+      <sim_time>3758 569000000</sim_time>
+      <real_time>29 99741323</real_time>
+      <wall_time>1483458782 135070348</wall_time>
       <model name='Dumpster'>
-        <pose>-6 3 0.000917 0 -2e-06 0</pose>
+        <pose>-6 3 0.000916 -8e-06 -0 -0</pose>
         <link name='link'>
-          <pose>-6 3 0.000917 0 -2e-06 0</pose>
+          <pose>-6 3 0.000916 -8e-06 -0 -0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0.00547 -0.000823 -1.05525 0.916355 0.340158 -3.1e-05</acceleration>
-          <wrench>-0.00547 -0.000823 -1.05525 0 -0 0</wrench>
+          <acceleration>0.00567 0.002945 -0.978483 3.07449 -0.128416 7e-06</acceleration>
+          <wrench>0.00567 0.002945 -0.978483 0 -0 0</wrench>
         </link>
       </model>
       <model name='create'>
-        <pose>-0.65528 -0.064571 0.000673 -0.000602 -0.002648 -0.014115</pose>
+        <pose>-0.908404 -0.173244 0.000933 -9.1e-05 -0.000519 0.028919</pose>
         <link name='base'>
-          <pose>-0.65528 -0.064571 0.000673 -0.000602 -0.002648 -0.014115</pose>
-          <velocity>-0.00013 -3.3e-05 0.004495 0.001622 0.007199 -4e-06</velocity>
-          <acceleration>0.034375 -0.000496 9.57808 0.002424 0.027368 -0.000667</acceleration>
-          <wrench>0.076793 -0.001107 21.3974 0 -0 0</wrench>
+          <pose>-0.908404 -0.173244 0.000933 -9.1e-05 -0.000519 0.028919</pose>
+          <velocity>-0.000143 0.000703 0.000299 0.02136 -0.000181 0.000943</velocity>
+          <acceleration>-0.000865 -0.037379 0.886413 1.18063 0.022165 0.015754</acceleration>
+          <wrench>-0.001932 -0.083504 1.98025 0 -0 0</wrench>
+        </link>
+        <link name='camera_sensor_left_link'>
+          <pose>-0.735014 -0.118191 0.176018 -9.1e-05 -0.000518 0.028919</pose>
+          <velocity>-0.000293 -0.002788 0.001627 0.020748 -0.000653 0.000909</velocity>
+          <acceleration>0.045488 -6.39351 3.29483 -1.91251 0.030424 -0.006179</acceleration>
+          <wrench>0 -6.4e-05 3.3e-05 0 -0 0</wrench>
+        </link>
+        <link name='camera_sensor_right_link'>
+          <pose>-0.732123 -0.218149 0.176027 -9.2e-05 -0.000518 0.028919</pose>
+          <velocity>-0.000199 -0.002785 -0.000448 0.020747 -0.000633 0.000909</velocity>
+          <acceleration>0.045986 -6.39394 -1.08156 -1.91149 0.033948 -0.005061</acceleration>
+          <wrench>0 -6.4e-05 -1.1e-05 0 -0 0</wrench>
         </link>
         <link name='hokuyo_link'>
-          <pose>-0.605576 -0.065206 0.110805 -0.000602 -0.002648 -0.014115</pose>
-          <velocity>0.000662 -0.000213 0.004028 0.001628 0.007153 -4e-06</velocity>
-          <acceleration>0.116315 -0.011998 9.30631 0.013954 0.094894 -8.4e-05</acceleration>
-          <wrench>1e-06 -0 9.3e-05 0 -0 0</wrench>
+          <pose>-0.858483 -0.17179 0.110958 -9.2e-05 -0.000519 0.028919</pose>
+          <velocity>-0.000201 -0.001552 0.000434 0.02078 -0.000586 0.000943</velocity>
+          <acceleration>0.024597 -3.54627 0.98881 -1.90628 0.045633 0.000492</acceleration>
+          <wrench>0 -3.5e-05 1e-05 0 -0 0</wrench>
         </link>
         <link name='left_wheel'>
-          <pose>-0.653571 0.065438 0.033014 -3.14082 0.681752 3.12796</pose>
-          <velocity>0.000231 -9.5e-05 0.015437 0.002842 0.007107 -6e-06</velocity>
-          <acceleration>0.279922 0.069744 30.8374 0.252168 0.093158 -0.000466</acceleration>
-          <wrench>0.002799 0.000697 0.308374 0 -0 0</wrench>
+          <pose>-0.912179 -0.043299 0.03301 -0.000102 -0.00123 0.028919</pose>
+          <velocity>-4.3e-05 -0.000626 0.019376 0.019492 -0.000784 0.000946</velocity>
+          <acceleration>0.502738 -1.48039 40.7826 -2.17957 0.008161 0.001205</acceleration>
+          <wrench>0.005027 -0.014804 0.407826 0 -0 0</wrench>
         </link>
         <link name='right_wheel'>
-          <pose>-0.65727 -0.194536 0.033016 -3.13959 1.26904 3.12939</pose>
-          <velocity>0.000231 -9.3e-05 0.017567 0.002793 0.0071 -6e-06</velocity>
-          <acceleration>0.281423 0.065889 37.7358 0.264191 0.092141 -0.000606</acceleration>
-          <wrench>0.002814 0.000659 0.377358 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='drc_practice_angled_barrier_135'>
-        <pose>-0.574013 -1.17416 0 0 -0 0</pose>
-        <link name='eight::link'>
-          <pose>9.57559 4.34198 0 0 0 -0.785398</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='five::link'>
-          <pose>5.81439 0.61658 0 0 0 -0.785398</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='four::link'>
-          <pose>4.5603 -0.62579 0 0 0 -0.785398</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='nine::link'>
-          <pose>10.4548 5.26787 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='one::link'>
-          <pose>-0.574013 -1.17416 0 0 0 -1.5707</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='seven::link'>
-          <pose>8.3221 3.10113 0 0 0 -0.785398</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='six::link'>
-          <pose>7.06829 1.85842 0 0 0 -0.785398</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='ten::link'>
-          <pose>10.4548 5.26787 0.866 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='three::link'>
-          <pose>2.95521 -1.19033 0 0 0 -1.5707</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='two::link'>
-          <pose>1.19059 -1.18272 0 0 0 -1.5707</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='drc_practice_organge_jersey_barrier'>
-        <pose>1.38706 3.00895 0 0 0 -1.58915</pose>
-        <link name='link'>
-          <pose>1.38706 3.00895 0 0 0 -1.58915</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='drc_practice_white_jersey_barrier'>
-        <pose>3.17146 3.0524 0 0 0 -1.52796</pose>
-        <link name='link'>
-          <pose>3.17146 3.0524 0 0 0 -1.52796</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='drc_practice_white_jersey_barrier_0'>
-        <pose>-0.346599 3.06921 0 0 0 -1.52735</pose>
-        <link name='link'>
-          <pose>-0.346599 3.06921 0 0 0 -1.52735</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
+          <pose>-0.904662 -0.303184 0.032992 -9.8e-05 -0.000282 0.028919</pose>
+          <velocity>-1.2e-05 -0.000609 -0.014284 0.02229 -0.000565 0.000943</velocity>
+          <acceleration>0.029392 -1.40008 -28.6623 -1.604 0.038763 0.00049</acceleration>
+          <wrench>0.000294 -0.014001 -0.286623 0 -0 0</wrench>
         </link>
       </model>
       <model name='grey_tote'>
@@ -1680,14 +1144,14 @@
         <link name='link'>
           <pose>2.94008 4.94933 0.000566 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0 0 0 -0 -0 -0</acceleration>
+          <acceleration>-0 0 0 0 -0 0</acceleration>
           <wrench>-0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='grey_wall'>
-        <pose>-1.31446 2.5098 0 0 -0 1.56948</pose>
+        <pose>-1.34208 -0.60899 0 0 -0 1.56948</pose>
         <link name='link'>
-          <pose>-1.31446 2.5098 1.4 0 -0 1.56948</pose>
+          <pose>-1.34208 -0.60899 1.4 0 -0 1.56948</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -1697,6 +1161,24 @@
         <pose>3.81178 2.98838 0 0 0 -1.58944</pose>
         <link name='link'>
           <pose>3.81178 2.98838 1.4 0 0 -1.58944</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='grey_wall_1'>
+        <pose>2.344 -0.808754 0 0 -0 0.025222</pose>
+        <link name='link'>
+          <pose>2.344 -0.808754 1.4 0 -0 0.025222</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='grey_wall_2'>
+        <pose>0.172013 3.22492 0 0 -0 0</pose>
+        <link name='link'>
+          <pose>0.172013 3.22492 1.4 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -1714,9 +1196,101 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>1.92924 4.76646 24.4441 0 1.5618 -0.003829</pose>
+        <pose>0.454314 0.488653 13.3016 -1.2e-05 1.5698 -0.271847</pose>
         <view_controller>orbit</view_controller>
       </camera>
     </gui>
+    <model name='grey_wall_1'>
+      <static>1</static>
+      <link name='link'>
+        <pose>0 0 1.4 0 -0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>7.5 0.2 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>7.5 0.2 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://grey_wall/materials/scripts_women_of_algiers</uri>
+              <uri>model://grey_wall/materials/textures</uri>
+              <name>vrc/grey_wall_women_of_algiers</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>0 -1 0 0 -0 0</pose>
+    </model>
+    <model name='grey_wall_2'>
+      <static>1</static>
+      <link name='link'>
+        <pose>0 0 1.4 0 -0 0</pose>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>7.5 0.2 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>7.5 0.2 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://grey_wall/materials/scripts</uri>
+              <uri>model://grey_wall/materials/textures</uri>
+              <name>vrc/grey_wall</name>
+            </script>
+          </material>
+        </visual>
+        <velocity_decay>
+          <linear>0</linear>
+          <angular>0</angular>
+        </velocity_decay>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose>2.49613 3.40598 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>

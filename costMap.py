@@ -40,7 +40,7 @@ class costMap():
 
     def setVisit(self , x, y):
         p = self.toMapXY(x, y)
-        self.setCostMap(p[0], p[1], 1.5)
+        self.setCostMap(p[0], p[1], 1)
         nearby = self.getNearBy(p[0], p[1])
         for i in nearby:
             cost = self.getCostMap(i[0], i[1])
