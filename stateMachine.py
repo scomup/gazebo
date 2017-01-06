@@ -1,6 +1,9 @@
 # coding:utf-8
-class StateMachine:
+import threading
+
+class StateMachine(threading.Thread):
     def __init__(self): 
+        threading.Thread.__init__(self)
         self.handlers = {}        # 状态转移函数字典
         self.startState = None    # 初始状态
         self.endStates = []       # 最终状态集合

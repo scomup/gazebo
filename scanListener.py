@@ -15,7 +15,7 @@ class scanListener(threading.Thread):
     def __init__(self, costMap):  
         threading.Thread.__init__(self)
         self.pos_init = 0
-        rospy.init_node('listener', anonymous=False)
+        #rospy.init_node('plan_planner', anonymous=False)
 
         rospy.Subscriber("scan", LaserScan, self.callback_scan, queue_size = 1)
 

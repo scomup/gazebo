@@ -17,14 +17,22 @@ from actionlib_msgs.msg import *
 from stateMachine import StateMachine
 from costMap import costMap
 from scanListener import scanListener
+from mapDrawer import mapDrawer
+import sys
+import pyqtgraph as pg
+from pyqtgraph.Qt import QtCore, QtGui
+
 
 class pathPlaner(threading.Thread):
-    def __init__(self, costMap, scan):
+    def __init__(self, costMap, scan, drawer):
         threading.Thread.__init__(self)
         rospy.on_shutdown(self.shutdown)
+        #rospy.init_node('pathplanner')
+
         self.prePos = (0,0,0)
         self.map = costMap
         self.scan = scan
+        self.drawer = drawer
         rospy.loginfo("Waiting for ORB_SLAM2 ...")
         while self.scan.pos_init == 0:
             pass
@@ -41,7 +49,7 @@ class pathPlaner(threading.Thread):
         self.m.add_state("TURNTO_UP", self.turnto_up) 
         self.m.add_state("TURNTO_DOWN", self.turnto_down)
         self.m.add_state("GO_DOWN", self.go_down)
-
+        self.m.setDaemon(True)
         self.m.set_start("GO_UP") 
         #self.scan.listener.waitForTransform("odom", "base_footprint", rospy.Time(), rospy.Duration(4.0))
 
@@ -63,7 +71,7 @@ class pathPlaner(threading.Thread):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
         #trans = self.scan.trans
         #rot = self.scan.rot
-        pos = (trans[0] + 3.9, trans[1], 0)
+        pos = (trans[0] + 3.8, trans[1], 0)
         rospy.loginfo("Try to go up: " + str(pos))
         self.goto(pos)
         preState = 0
@@ -73,7 +81,7 @@ class pathPlaner(threading.Thread):
                 preState = state
                 print str(self.goal_states[state])
             if str(self.goal_states[state]) == 'SUCCEEDED':
-                nextState = 'GO_UP'        
+                nextState = 'TURNTO_DOWN'        
                 break
             elif self.scan.front:
                 print 'obs break!'
@@ -136,7 +144,7 @@ class pathPlaner(threading.Thread):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
         #trans = self.scan.trans
         #rot = self.scan.rot
-        pos = (trans[0] - 3.9, trans[1], pi)
+        pos = (trans[0] - 3.8, trans[1], pi)
         rospy.loginfo("Try to go down: " + str(pos))
         self.goto(pos)
         preState = 0
@@ -147,7 +155,7 @@ class pathPlaner(threading.Thread):
                 print str(self.goal_states[state])
             if str(self.goal_states[state]) == 'SUCCEEDED':
                 rospy.loginfo("SUCCEEDED")
-                nextState = 'GO_DOWN'        
+                nextState = 'TURNTO_UP'        
                 break
             elif self.scan.front:
                 print 'obs break!'
@@ -163,24 +171,31 @@ class pathPlaner(threading.Thread):
         rospy.sleep(1)
 
     def run(self):
-        self.m.run()
+        self.m.setDaemon(True)
+        self.m.start()
+        try:
+            while True:
+                self.drawer.q.put(cmap.map_data)
+                time.sleep(0.1)
+        except KeyboardInterrupt:
+            print 'interrupted!'
+        
+            
         
 if __name__ == '__main__':
     try:
-        cmap = costMap(row = 50,col = 50,c_row = 10,c_col = 10)
+	rospy.init_node('plan_planner', anonymous=False)
+        cmap = costMap(row = 200, col = 200, c_row = 40, c_col = 40, resolution = 0.05)
         scan = scanListener(cmap)
+        scan.setDaemon(True)
         scan.start()
-        planer = pathPlaner(cmap, scan)
+        drawer = mapDrawer()
+        planer = pathPlaner(cmap, scan, drawer)
         time.sleep(0.5)
+        planer.setDaemon(True)
         planer.start()
-        fig, ax = plt.subplots()
-        ax.set_aspect('equal')
-        plt.axis([0,50,0,50])
-        while True:
-           ax.pcolor(scan.map.map_data,cmap=plt.cm.Reds,edgecolors='k')
-           ax.plot( scan.y, scan.x, '-o', c="b") 
-           plt.pause(0.3)
+        drawer.run()
     except:
-        rospy.loginfo("Main Error!.")
+        print 'Main except!'
             
             
