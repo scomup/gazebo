@@ -2,8 +2,6 @@
 # coding:utf-8
 
 import rospy
-from geometry_msgs.msg import Twist
-from geometry_msgs.msg import PointStamped
 from geometry_msgs.msg import Pose, Quaternion, Point
 from matplotlib import pyplot as plt
 import numpy as np
@@ -18,16 +16,12 @@ from stateMachine import StateMachine
 from costMap import costMap
 from scanListener import scanListener
 from mapDrawer import mapDrawer
-import sys
-import pyqtgraph as pg
-from pyqtgraph.Qt import QtCore, QtGui
 
 
 class pathPlaner(threading.Thread):
     def __init__(self, costMap, scan, drawer):
         threading.Thread.__init__(self)
         rospy.on_shutdown(self.shutdown)
-        #rospy.init_node('pathplanner')
 
         self.prePos = (0,0,0)
         self.map = costMap
@@ -175,8 +169,8 @@ class pathPlaner(threading.Thread):
         self.m.start()
         try:
             while True:
-                self.drawer.q.put(cmap.map_data)
-                time.sleep(0.1)
+                self.drawer.q.put(self.map.map_data)
+                rospy.sleep(0.1)
         except KeyboardInterrupt:
             print 'interrupted!'
         
@@ -184,14 +178,13 @@ class pathPlaner(threading.Thread):
         
 if __name__ == '__main__':
     try:
-	rospy.init_node('plan_planner', anonymous=False)
+        rospy.init_node('plan_planner', anonymous=False)
         cmap = costMap(row = 200, col = 200, c_row = 40, c_col = 40, resolution = 0.05)
         scan = scanListener(cmap)
         scan.setDaemon(True)
         scan.start()
         drawer = mapDrawer()
         planer = pathPlaner(cmap, scan, drawer)
-        time.sleep(0.5)
         planer.setDaemon(True)
         planer.start()
         drawer.run()
