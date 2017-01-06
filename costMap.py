@@ -39,6 +39,8 @@ class costMap():
         return tmp
 
     def setVisit(self , x, y):
+        x_grid, y_grid = np.meshgrid(np.arange(9), numpy.arange(9)) 
+        disk = ((x_grid-4)**2 + (y_grid-4)**2) <= radius**2
         p = self.toMapXY(x, y)
         self.setCostMap(p[0], p[1], 1)
         nearby = self.getNearBy(p[0], p[1])
