@@ -23,24 +23,18 @@ class scanListener(threading.Thread):
         self.listener.waitForTransform('visual_odom', 'base_footprint', rospy.Time(), rospy.Duration(60.0))
         rospy.on_shutdown(self.shutdown)
         self.map = costMap
-        self.front = 0
         self.pos_init = 1
-        self.x = []
-        self.y = []
+        self.path = (0,0)
 
     def run(self):
         rospy.spin()
     def callback_scan(self, data):
         if self.pos_init == 0:
             return 
-        d = np.array(data.ranges)
-        self.front = np.mean(d[315:325]) < 0.8
         try:
             (trans,rot) = self.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
             Rt = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
-            new_path = self.map.toMapXY(trans[0], trans[1])
-            self.x.append(new_path[0])
-            self.y.append(new_path[1])
+            self.path = self.map.toMapXY(trans[0], trans[1])
 
         except:
             return 

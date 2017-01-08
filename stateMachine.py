@@ -23,8 +23,8 @@ class StateMachine(threading.Thread):
             handler = self.handlers[self.startState]
         except:
             raise InitializationError("must call .set_start() before .run()")
-        #if not self.endStates:
-         #   raise  InitializationError("at least one state must be an end_state")
+        if not self.endStates:
+            raise  InitializationError("at least one state must be an end_state")
         
         # 从Start状态开始进行处理
         while True: 

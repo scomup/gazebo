@@ -16,17 +16,21 @@ from stateMachine import StateMachine
 from costMap import costMap
 from scanListener import scanListener
 from mapDrawer import mapDrawer
-
+import ConfigParser
 
 class pathPlaner(threading.Thread):
     def __init__(self, costMap, scan, drawer):
         threading.Thread.__init__(self)
         rospy.on_shutdown(self.shutdown)
-
+        inifile = ConfigParser.SafeConfigParser()
+        inifile.read('./config.ini')
         self.prePos = (0,0,0)
         self.map = costMap
         self.scan = scan
         self.drawer = drawer
+        self.safe_obstacle_distance_go = inifile.getfloat('path_planner', 'safe_obstacle_distance_go')
+        self.safe_obstacle_distance_turn = inifile.getfloat('path_planner', 'safe_obstacle_distance_turn')
+
         rospy.loginfo("Waiting for ORB_SLAM2 ...")
         while self.scan.pos_init == 0:
             pass
@@ -43,6 +47,7 @@ class pathPlaner(threading.Thread):
         self.m.add_state("TURNTO_UP", self.turnto_up) 
         self.m.add_state("TURNTO_DOWN", self.turnto_down)
         self.m.add_state("GO_DOWN", self.go_down)
+        self.m.add_state("END", self.end, end_state=1)
         self.m.setDaemon(True)
         self.m.set_start("GO_UP") 
         #self.scan.listener.waitForTransform("odom", "base_footprint", rospy.Time(), rospy.Duration(4.0))
@@ -60,16 +65,21 @@ class pathPlaner(threading.Thread):
         goal.target_pose.header.stamp = rospy.Time.now()
         self.move_base.send_goal(goal)
 
+    def end(self):
+        rospy.loginfo("Cleaning Finished!")
+        self.move_base.cancel_goal() 
             
     def go_up(self):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
-        #trans = self.scan.trans
-        #rot = self.scan.rot
-        pos = (trans[0] + 3.8, trans[1], 0)
+        gx,gy = self.map.get_goal(trans[0], trans[1], 'up')
+        pos = (gx, gy, 0)
         rospy.loginfo("Try to go up: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
+            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            fx = trans[0] + self.safe_obstacle_distance_go
+            fy = trans[1]
             state = self.move_base.get_state()
             if preState != state:
                 preState = state
@@ -77,8 +87,8 @@ class pathPlaner(threading.Thread):
             if str(self.goal_states[state]) == 'SUCCEEDED':
                 nextState = 'TURNTO_DOWN'        
                 break
-            elif self.scan.front:
-                print 'obs break!'
+            elif self.map.check_obs(fx, fy) == True:
+                print 'Obstacle detected!'
                 self.move_base.cancel_goal() 
                 nextState = 'TURNTO_DOWN'        
                 break
@@ -87,13 +97,15 @@ class pathPlaner(threading.Thread):
 
     def turnto_down(self):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
-        #trans = self.scan.trans
-        #rot = self.scan.rot
-        pos = (trans[0], trans[1] + 0.4, pi)
+        gx,gy = self.map.get_goal(trans[0], trans[1], 'left')
+        pos = (gx, gy, pi)
         rospy.loginfo("Try to turn to down: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
+            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            fx = trans[0]
+            fy = trans[1] + self.safe_obstacle_distance_turn
             state = self.move_base.get_state()
             if preState != state:
                 preState = state
@@ -101,23 +113,25 @@ class pathPlaner(threading.Thread):
             if str(self.goal_states[state]) == 'SUCCEEDED':
                 nextState = 'GO_DOWN'        
                 break
-            #elif self.scan.front:
-            #    print 'obs break!'
-            #    self.move_base.cancel_goal() 
-            #    nextState = 'TURNTO_DOWN'        
+            elif self.map.check_obs(fx, fy):
+                print 'Obstacle detected!'
+                self.move_base.cancel_goal() 
+                nextState = 'END'        
                 break
             rospy.sleep(1)
         return nextState
 
     def turnto_up(self):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
-        #trans = self.scan.trans
-        #rot = self.scan.rot
-        pos = (trans[0], trans[1] + 0.4, 0)
+        gx,gy = self.map.get_goal(trans[0], trans[1], 'left')
+        pos = (gx, gy, 0)
         rospy.loginfo("Try to turn to up: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
+            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            fx = trans[0]
+            fy = trans[1] + self.safe_obstacle_distance_turn
             state = self.move_base.get_state()
             if preState != state:
                 preState = state
@@ -125,10 +139,10 @@ class pathPlaner(threading.Thread):
             if str(self.goal_states[state]) == 'SUCCEEDED':
                 nextState = 'GO_UP'        
                 break
-            #elif self.scan.front:
-            #    print 'obs break!'
-            #    self.move_base.cancel_goal() 
-            #    nextState = 'TURNTO_DOWN'        
+            elif self.map.check_obs(fx, fy):
+                print 'Obstacle detected!'
+                self.move_base.cancel_goal() 
+                nextState = 'END'        
                 break
             rospy.sleep(1)
         return nextState
@@ -136,23 +150,25 @@ class pathPlaner(threading.Thread):
 
     def go_down(self):
         (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
-        #trans = self.scan.trans
-        #rot = self.scan.rot
-        pos = (trans[0] - 3.8, trans[1], pi)
+        gx,gy = self.map.get_goal(trans[0], trans[1], 'down')
+        pos = (gx, gy, pi)
         rospy.loginfo("Try to go down: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
+            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            fx = trans[0] - self.safe_obstacle_distance_go
+            fy = trans[1]
             state = self.move_base.get_state()
             if preState != state:
                 preState = state
                 print str(self.goal_states[state])
             if str(self.goal_states[state]) == 'SUCCEEDED':
-                rospy.loginfo("SUCCEEDED")
+                rospy.loginfo("TURNTO_UP")
                 nextState = 'TURNTO_UP'        
                 break
-            elif self.scan.front:
-                print 'obs break!'
+            elif self.map.check_obs(fx, fy):
+                print 'Obstacle detected!'
                 self.move_base.cancel_goal() 
                 nextState = 'TURNTO_UP'        
                 break
@@ -169,7 +185,7 @@ class pathPlaner(threading.Thread):
         self.m.start()
         try:
             while True:
-                self.drawer.q.put(self.map.map_data)
+                self.drawer.q.put((self.map.map_data,self.scan.path))
                 rospy.sleep(0.1)
         except KeyboardInterrupt:
             print 'interrupted!'

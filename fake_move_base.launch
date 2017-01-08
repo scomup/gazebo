@@ -6,6 +6,7 @@
     <rosparam file="./config/fake/local_costmap_params.yaml" command="load" />
     <rosparam file="./config/fake/global_costmap_params.yaml" command="load" />
     <rosparam file="./config/fake/base_local_planner_params.yaml" command="load" />
+    <remap from="/scan" to="/scan" />
   </node>
   
 </launch>

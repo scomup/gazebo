@@ -4,7 +4,7 @@ raytrace_range: 3.0
 #footprint_inflation: 0.01
 #robot_radius: 0.175
 #inflation_radius: 0.2
-robot_radius: 0.15  
+robot_radius: 0.174  
 inflation_radius: 0.1  
 max_obstacle_height: 0.6
 min_obstacle_height: 0.0

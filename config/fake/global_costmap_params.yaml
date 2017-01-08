@@ -6,7 +6,7 @@ global_costmap:
    static_map: false
    rolling_window: false
    resolution: 0.1
-   transform_tolerance: 1.0
+   transform_tolerance: 0.2
    width: 100.0
    height: 100.0
    map_type: costmap
