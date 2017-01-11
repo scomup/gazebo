@@ -14,10 +14,9 @@ import actionlib
 from actionlib_msgs.msg import *
 from stateMachine import StateMachine
 from costMap import costMap
-from scanListener import scanListener
+from scanListener1 import scanListener
 from mapDrawer import mapDrawer
 import ConfigParser
-
 
 class pathPlaner(threading.Thread):
     def __init__(self, costMap, scan, drawer):
@@ -71,14 +70,14 @@ class pathPlaner(threading.Thread):
         self.move_base.cancel_goal() 
             
     def go_up(self):
-        (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+        (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
         gx,gy = self.map.get_goal(trans[0], trans[1], 'up')
         pos = (gx, gy, 0)
         rospy.loginfo("Try to go up: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
-            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
             fx = trans[0] + self.safe_obstacle_distance_go
             fy = trans[1]
             state = self.move_base.get_state()
@@ -97,14 +96,14 @@ class pathPlaner(threading.Thread):
         return nextState
 
     def turnto_down(self):
-        (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+        (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
         gx,gy = self.map.get_goal(trans[0], trans[1], 'left')
         pos = (gx, gy, pi)
         rospy.loginfo("Try to turn to down: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
-            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
             fx = trans[0]
             fy = trans[1] + self.safe_obstacle_distance_turn
             state = self.move_base.get_state()
@@ -123,14 +122,14 @@ class pathPlaner(threading.Thread):
         return nextState
 
     def turnto_up(self):
-        (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+        (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
         gx,gy = self.map.get_goal(trans[0], trans[1], 'left')
         pos = (gx, gy, 0)
         rospy.loginfo("Try to turn to up: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
-            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
             fx = trans[0]
             fy = trans[1] + self.safe_obstacle_distance_turn
             state = self.move_base.get_state()
@@ -150,14 +149,14 @@ class pathPlaner(threading.Thread):
 
 
     def go_down(self):
-        (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+        (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
         gx,gy = self.map.get_goal(trans[0], trans[1], 'down')
         pos = (gx, gy, pi)
         rospy.loginfo("Try to go down: " + str(pos))
         self.goto(pos)
         preState = 0
         while True:
-            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
             fx = trans[0] - self.safe_obstacle_distance_go
             fy = trans[1]
             state = self.move_base.get_state()
@@ -182,8 +181,8 @@ class pathPlaner(threading.Thread):
         rospy.sleep(1)
 
     def run(self):
-        self.m.setDaemon(True)
-        self.m.start()
+        #self.m.setDaemon(True)
+        #self.m.start()
         try:
             while True:
                 self.drawer.q.put((self.map.map_data,self.scan.path))

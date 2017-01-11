@@ -28,8 +28,9 @@ colorAssoc = {
              0: "white",
              1: "lightgreen",
              2: "darkred",
+             3: "darkgreen",
     }
-lut = np.zeros((3, 3), dtype=np.ubyte)
+lut = np.zeros((4, 3), dtype=np.ubyte)
 rgbByName = {key: np.array((int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16)))
              for key, value in hexByName.items()}
 

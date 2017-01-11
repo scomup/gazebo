@@ -29,6 +29,11 @@ class costMap():
         p = self.toMapXY(x, y)
         return self.map_data[p[0], p[1]] == OBSTACLE
 
+    def check_nearby_obs(self, x, y):
+        data = self.map_data[(x - 8):][:17][:, (y - 8):][:, :17]
+        return np.any( data == 2 ) 
+
+
     def get_goal(self, x, y, d):
         p = self.toMapXY(x, y)
         if(d == 'up'):
@@ -72,7 +77,6 @@ class costMap():
     def toMapXY(self, x, y):
         return (round(self.c_row + x / self.resolution), round(self.c_col + y / self.resolution))          
     def toWorldXY(self, x, y):
-        
         return (float(self.resolution * (x - self.c_row)), float(self.resolution * (y - self.c_col)))         
 
 
@@ -81,9 +85,18 @@ class costMap():
         self.map_data[(x - 2):][:5][:, (y - 2):][:, :5] = cost
 
 
-    def getCostMap(self, x, y):
-        return self.map_data[x, y]
+    def getCostMap(self, p1, p2):
+        return self.map_data[p1, p2]
 
+    def chkFrontier(self, p):
+        data = self.map_data[(p[0] - 1):][:3][:, (p[1] - 1):][:, :3]
+        f1 = np.any( data == 0 ) 
+        if f1 == False:
+            return False
+        data2 = self.map_data[(p[0] - 8):][:17][:, (p[1] - 8):][:, :17]
+        return np.all( data2 != 2 ) 
+
+        
 
     def setVisit(self , x, y):
         p = self.toMapXY(x, y)
