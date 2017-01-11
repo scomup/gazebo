@@ -18,7 +18,7 @@ from scanListener1 import scanListener
 from mapDrawer import mapDrawer
 import ConfigParser
 
-class pathPlaner(threading.Thread):
+class explorer(threading.Thread):
     def __init__(self, costMap, scan, drawer):
         threading.Thread.__init__(self)
         rospy.on_shutdown(self.shutdown)
@@ -72,7 +72,7 @@ class pathPlaner(threading.Thread):
         preState = 0
         i = 0
         while True:
-            (trans,rot) = self.scan.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.scan.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
             fx = trans[0]
             fy = trans[1]
             state = self.move_base.get_state()

@@ -19,7 +19,7 @@ from mapDrawer import mapDrawer
 import ConfigParser
 
 
-class pathPlaner(threading.Thread):
+class pathPlanner(threading.Thread):
     def __init__(self, costMap, scan, drawer):
         threading.Thread.__init__(self)
         rospy.on_shutdown(self.shutdown)
@@ -201,7 +201,7 @@ if __name__ == '__main__':
         scan.setDaemon(True)
         scan.start()
         drawer = mapDrawer()
-        planer = pathPlaner(cmap, scan, drawer)
+        planer = pathPlanner(cmap, scan, drawer)
         planer.setDaemon(True)
         planer.start()
         drawer.run()

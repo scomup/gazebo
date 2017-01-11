@@ -22,7 +22,7 @@ class scanListener(threading.Thread):
 
         self.listener = tf.TransformListener()
         print 'Waiting for tf ...'
-        self.listener.waitForTransform('odom', 'base_footprint', rospy.Time(), rospy.Duration(60.0))
+        self.listener.waitForTransform('visual_odom', 'base_footprint', rospy.Time(), rospy.Duration(60.0))
         rospy.on_shutdown(self.shutdown)
         self.map = costMap
         self.pos_init = 1
@@ -34,7 +34,7 @@ class scanListener(threading.Thread):
         if self.pos_init == 0:
             return 
         try:
-            (trans,rot) = self.listener.lookupTransform('odom', 'base_footprint', rospy.Time())
+            (trans,rot) = self.listener.lookupTransform('visual_odom', 'base_footprint', rospy.Time())
             Rt = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
             self.path = self.map.toMapXY(trans[0], trans[1])
 
@@ -42,16 +42,15 @@ class scanListener(threading.Thread):
             return 
         self.map.setVisit(trans[0],trans[1])
         tmp = []
+        r = np.array(data.ranges)
+        theta = np.arange(data.angle_min,data.angle_max + data.angle_increment,data.angle_increment)
+        a = np.c_[np.cos(theta) * r, np.sin(theta)* r, np.zeros(len(r)), np.ones(len(r))]
+        points = np.dot(Rt, a.T).T[:,:2]
+
         for i in range(len(data.ranges)):
-            rangex = data.ranges[i]
-            anglex  = data.angle_min +(i * data.angle_increment)
-            x = rangex * cos(anglex)
-            y = rangex * sin(anglex)
-            Rt = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
-            xyz = tuple(np.dot(Rt, np.array([x, y, 0, 1.0])))[:3]
-            p = self.map.toMapXY(xyz[0], xyz[1])
+            p = self.map.toMapXY(points[i,0], points[i,1])
             get_line(self.map.map_data, self.path, p)
-            if rangex != 1.0:
+            if data.ranges[i] != 1.0:
                 self.map.setCostMap(p[0], p[1], 2)
             else:
                 tmp.append(p)

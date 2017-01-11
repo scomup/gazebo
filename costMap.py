@@ -93,7 +93,7 @@ class costMap():
         f1 = np.any( data == 0 ) 
         if f1 == False:
             return False
-        data2 = self.map_data[(p[0] - 8):][:17][:, (p[1] - 8):][:, :17]
+        data2 = self.map_data[(p[0] - 7):][:15][:, (p[1] - 7):][:, :15]
         return np.all( data2 != 2 ) 
 
         
