@@ -82,6 +82,9 @@ class explorer(threading.Thread):
             if str(self.goal_states[state]) == 'SUCCEEDED':
                 nextState = 'NEXT'        
                 break
+            if str(self.goal_states[state]) == 'ABORTED':
+                nextState = 'NEXT'        
+                break
             elif i >= 2 and self.map.check_nearby_obs(fx, fy) == True:
                 print 'Obstacle detected!'
                 self.move_base.cancel_goal() 
